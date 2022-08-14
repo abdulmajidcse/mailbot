@@ -57,11 +57,5 @@ class Handler extends ExceptionHandler
                 return (new ErrorResource([], $e->getStatusCode(), $e->getMessage()))->response()->setStatusCode($e->getStatusCode());
             }
         });
-
-        $this->renderable(function (Throwable $e, $request) {
-            if ($request->is('api/*')) {
-                return new ErrorResource([], 422, 'Server or Unknown Error');
-            }
-        });
     }
 }

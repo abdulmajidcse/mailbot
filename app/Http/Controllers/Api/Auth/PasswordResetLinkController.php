@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ErrorResource;
+use App\Http\Resources\SuccessResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
 
 class PasswordResetLinkController extends Controller
 {
@@ -19,23 +21,23 @@ class PasswordResetLinkController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validation = Validator::make($request->all(), [
             'email' => ['required', 'email'],
         ]);
+
+        if ($validation->fails()) {
+            return new ErrorResource($validation->getMessageBag());
+        }
 
         // We will send the password reset link to this user. Once we have attempted
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        $status = Password::sendResetLink($validation->validated());
 
         if ($status != Password::RESET_LINK_SENT) {
-            throw ValidationException::withMessages([
-                'email' => [__($status)],
-            ]);
+            return new ErrorResource(['email' => [__($status)]]);
         }
 
-        return response()->json(['status' => __($status)]);
+        return new SuccessResource([], 200, __($status));
     }
 }
