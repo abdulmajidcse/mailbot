@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Verified;
+use App\Http\Resources\SuccessResource;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 class VerifyEmailController extends Controller
@@ -18,17 +18,13 @@ class VerifyEmailController extends Controller
     public function __invoke(EmailVerificationRequest $request)
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(
-                config('app.frontend_url').RouteServiceProvider::HOME.'?verified=1'
-            );
+            return new SuccessResource([], 200, 'Email already verified!');
         }
 
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
 
-        return redirect()->intended(
-            config('app.frontend_url').RouteServiceProvider::HOME.'?verified=1'
-        );
+        return new SuccessResource([], 200, 'Email verified successfully!');
     }
 }
