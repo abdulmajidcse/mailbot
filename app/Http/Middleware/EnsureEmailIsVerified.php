@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\ErrorResource;
 use Closure;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 
@@ -17,10 +18,12 @@ class EnsureEmailIsVerified
      */
     public function handle($request, Closure $next, $redirectToRoute = null)
     {
-        if (! $request->user() ||
+        if (
+            !$request->user() ||
             ($request->user() instanceof MustVerifyEmail &&
-            ! $request->user()->hasVerifiedEmail())) {
-            return response()->json(['message' => 'Your email address is not verified.'], 409);
+                !$request->user()->hasVerifiedEmail())
+        ) {
+            return (new ErrorResource([], 409, 'Your email address is not verified.'))->response()->setStatusCode(409);
         }
 
         return $next($request);

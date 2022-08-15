@@ -31,7 +31,9 @@ Route::middleware('auth:sanctum')->group(function () {
         ->middleware(['throttle:6,1'])
         ->name('verification.send');
 
-    Route::get('/user', [AuthenticatedUserController::class, '__invoke'])->name('user');
+    Route::middleware('verified')->group(function () {
+        Route::get('/user', [AuthenticatedUserController::class, '__invoke'])->name('user');
+    });
 
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
