@@ -22,10 +22,13 @@ const AuthSidebar = () => {
                 <div className="sidebar">
                     {/* Sidebar user panel (optional) */}
                     <div className="user-panel mt-3 pb-3 mb-3 d-flex">
-                        <div className="image">
+                        <div
+                            className="image"
+                            style={{ color: "rgb(207 207 207 / 80%)" }}
+                        >
                             <span className="img-circle elevation-2">
                                 <i
-                                    class="far fa-user-circle"
+                                    className="far fa-user-circle"
                                     style={{
                                         fontSize: "25px",
                                         marginTop: "4px",

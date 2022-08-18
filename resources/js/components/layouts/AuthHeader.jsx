@@ -21,11 +21,6 @@ const AuthHeader = () => {
                             Home
                         </Link>
                     </li>
-                    <li className="nav-item d-none d-sm-inline-block">
-                        <Link to={"blank"} className="nav-link">
-                            Blank Page
-                        </Link>
-                    </li>
                 </ul>
                 {/* Right navbar links */}
                 <ul className="navbar-nav ml-auto">
