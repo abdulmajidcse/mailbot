@@ -1,8 +1,18 @@
 import { Link } from "react-router-dom";
+import Loading from "../components/Loading";
+import { useState, useEffect } from "react";
 
 const Home = () => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 3000);
+    }, []);
     return (
         <>
+            <Loading isLoading={isLoading} />
             {/* Content Header (Page header) */}
             <div className="content-header">
                 <div className="container-fluid">
